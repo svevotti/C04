@@ -12,59 +12,46 @@
 
 #include <unistd.h>
 #include <stdio.h>
+
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-int	ft_count_digits(int n)
+int	ft_count_digits(int nb)
 {
-	int	c;
+	int	count;
+
+	count = 0;
+	if (nb == 0)
+		count = 1;
+	if (nb < 0)
+		nb = nb * (-1);
+	while (nb > 0)
+	{
+		nb = nb / 10;
+		count++;
+	}
+	return (count);
+}
+
+int ft_get_multiplier(int count)
+{
+	int c;
 
 	c = 1;
-	if (n == 0)
-	{
-		c = 1;
-	}
-	if (n < 0)
-	{
-		n = n * (-1);
-	}
-	while (n > 9)
-	{
-		n = n / 10;
-		c++;
-	}
-	return (c);
-}
-
-int ft_find_c_value(int count, int c)
-{
-	int i;
-
-	i = count - 1;
-	while (i > 0)
+	while (count > 1)
 	{
 		c = c * 10;
-		i--;
+		count--;
 	}
 	return (c);
-}
-
-int ft_print_negative_sign(int nb)
-{
-	if (nb < 0)
-	{
-		nb = nb * (-1);
-		ft_putchar('-');
-	}
-	return (nb);
 }
 
 void 	ft_putnbr(int nb)
 {
 	int	count;
-	int	c;
+	int	m;
 	int	digit;
 
 	if (nb == 0)
@@ -72,19 +59,18 @@ void 	ft_putnbr(int nb)
 	else
 	{
 		count = ft_count_digits(nb);
-		c = ft_find_c_value(count, 1);
-		nb = ft_print_negative_sign(nb);
-		if (count == 1)
+		m = ft_get_multiplier(count);
+		if (nb < 0)
 		{
-			ft_putchar('0' + nb);
-			return;
+			nb = nb * (-1);
+			ft_putchar('-');
 		}
 		while (nb > 0)
 		{
-			digit = nb / c;
+			digit = nb / m;
 			ft_putchar('0' + digit);
-			nb = nb - digit * c;
-			c = c / 10;
+			nb = nb - digit * m;
+			m = m / 10;
 		}
 	}
 }
@@ -96,5 +82,7 @@ int	main(void)
 	ft_putnbr(0);
 	ft_putchar('\n');
 	ft_putnbr(-21474);
+	ft_putchar('\n');
+	ft_putnbr(4);
 	ft_putchar('\n');
 }
